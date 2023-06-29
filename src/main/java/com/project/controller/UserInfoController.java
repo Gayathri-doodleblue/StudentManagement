@@ -9,19 +9,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.dto.AuthRequest;
 import com.project.exception.ControllerException;
 import com.project.exception.ServiceException;
 import com.project.exception.ValidationException;
 import com.project.model.Student;
 import com.project.model.UserInfo;
+import com.project.service.JwtService;
 import com.project.service.UserInfoService;
 
 
@@ -30,6 +35,13 @@ import com.project.service.UserInfoService;
 public class UserInfoController {
 	@Autowired
 	private ValidationException validationException;
+	
+	
+	@Autowired
+	private JwtService jwtService;
+
+	@Autowired
+	 AuthenticationManager authenticationManager;
 	Logger logger = LoggerFactory.getLogger(UserInfoController.class);
 	@Autowired
 	UserInfoService userInfoService;
@@ -61,5 +73,16 @@ public class UserInfoController {
 //	  return userInfoService.getUser(username);
 //	 }
 //	
+	
+	@PostMapping("/generateToken")
+    public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+        if (authentication.isAuthenticated()) {
+            return jwtService.generateToken(authRequest.getUsername());
+        } else {
+            throw new UsernameNotFoundException("invalid user request !");
+        }
+	
+	}
 	
 }

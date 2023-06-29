@@ -10,17 +10,22 @@ import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @SpringBootApplication
-@OpenAPIDefinition
+//@OpenAPIDefinition(
+//	    info = @Info(
+//	        title = "Your API Title",
+//	        description = "Your API Description",
+//	        version = "1.0.0"
+//	    )
+//	)
 @EnableAsync
 @EnableCaching
 public class StudentApplication {
 
 	public static void main(String[] args) {
-		
-//		String customTmpDir = "/path/to/custom/tmp/dir";
-//        System.setProperty("java.io.tmpdir", customTmpDir);
 		SpringApplication.run(StudentApplication.class, args);
 	}
 	

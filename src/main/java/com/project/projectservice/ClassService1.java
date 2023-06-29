@@ -73,4 +73,9 @@ public class ClassService1 {
 
        return savedClasses;
     }
+
+	public Classes getClassByName(String classname) {
+		return  classRepository.findByClassName(classname);
+		
+	}
 }

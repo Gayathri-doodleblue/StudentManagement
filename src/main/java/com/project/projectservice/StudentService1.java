@@ -247,6 +247,12 @@ public class StudentService1 {
         // Save studentList to the database
         return studentRepository.saveAll(studentList);
     }
+
+	public Student getStudentByName(String studentname) {
+		return studentRepository.findByFirstName(studentname);
+		
+	}
+
 	
 	
 	

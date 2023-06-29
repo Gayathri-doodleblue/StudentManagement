@@ -97,7 +97,7 @@ public class StudentService {
 		}
 	}
 
-	@Cacheable(cacheNames = "student", key = "#classId")
+	//@Cacheable(cacheNames = "students", key = "#classId")
 	public List<Student> getStudentsByClassId(int classId) {
 		try {
 			return studentRepository.findByClassesClassId(classId);

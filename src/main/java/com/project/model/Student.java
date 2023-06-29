@@ -56,7 +56,8 @@ public class Student implements Serializable{
 	private String address;
 	@Column(name="phoneNumber")
 	private Long phoneNumber;  
-	
+	@Column(name="email")
+	private String email;
 	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "class_id")
     private Classes classes;
@@ -76,5 +77,9 @@ public class Student implements Serializable{
         }
         return totalMarks;
     }
+    
+    
+   
+    
 //    
 }

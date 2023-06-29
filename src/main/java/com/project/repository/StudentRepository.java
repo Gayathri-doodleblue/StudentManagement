@@ -39,7 +39,9 @@ public interface StudentRepository extends JpaRepository<Student, Integer>{
 	 @Procedure(name = "getByStudents")
 	 public String findByStudentIds(@Param("studentIds") String studentIds);
 
-	List<Student> findByClassesClassId(Classes classes);
+	Student findByFirstName(String studentname);
+
+	//List<Student> findByClassesClassId(Classes classes);
 	 
 
 

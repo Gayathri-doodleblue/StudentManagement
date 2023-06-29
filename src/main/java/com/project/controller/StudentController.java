@@ -15,9 +15,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.Authentication;
-
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.config.UserInfoUserDetailsService;
+import com.project.dto.AuthRequest;
 import com.project.dto.AuthorizationUtils;
 import com.project.exception.ControllerException;
 import com.project.exception.ServiceException;
@@ -39,10 +42,11 @@ import com.project.model.Student;
 import com.project.model.UserInfo;
 import com.project.repository.StudentRepository;
 import com.project.repository.UserInfoRepository;
+import com.project.service.JwtService;
 import com.project.service.ReportCardService;
 import com.project.service.StudentService;
 import com.project.service.UserInfoService;
-
+import org.springframework.security.authentication.AuthenticationManager;
 import jakarta.transaction.Transactional;
 
 @RestController
@@ -51,6 +55,8 @@ import jakarta.transaction.Transactional;
 public class StudentController {
 
 	Logger logger = LoggerFactory.getLogger(StudentController.class);
+	
+	
 	
 	@Autowired
 	private StudentRepository studentRepository;
@@ -129,7 +135,7 @@ public class StudentController {
 //		}
 	}
 
-
+	@Cacheable(cacheNames ="students",key = "#classId")
 	@GetMapping("/byClass/{classId}")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public ResponseEntity<?> getStudentsByClassId(@PathVariable int classId) {
@@ -202,7 +208,7 @@ public class StudentController {
 
 	@PreAuthorize("hasAnyAuthority('ROLE_STUDENT', 'ROLE_ADMIN')")
 	@GetMapping("/getStudentById/{studentId}")
-	//@Cacheable(cacheNames ="students",key = "#studentId")
+	@Cacheable(cacheNames ="students",key = "#studentId")
 	public ResponseEntity<?> getStudentById(@PathVariable int studentId, Authentication authentication) {
 		try {
 			logger.info("Retrieving students: {}", studentId);
@@ -269,8 +275,6 @@ public class StudentController {
 	    return ResponseEntity.ok(studentDetails);
 	}
 	
-
 	
-
 
 }
